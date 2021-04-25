@@ -38,6 +38,10 @@ merged <- inner_join(combined, spotifyMinus, by = c("name", "artists"))
 #Merge songs based on max weeks.on.board
 maxWeeks <- merge(aggregate(weeks.on.board ~ name, merged, max), merged)
 maxWeeks <- unique(maxWeeks)
+maxWeeks <- maxWeeks[!duplicated(maxWeeks[c("name", "artists")]),]
 
 #Need to remove multiple entries, it seems Spotify has songs multiple times (maybe live performances, different versions), 
 #Average columns and merge based on song/name
+
+linearModel = lm(data = maxWeeks, weeks.on.board ~ .)
+summary(linearModel)
