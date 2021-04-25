@@ -1,4 +1,3 @@
-
 library(tidyr)
 library(tidyverse)
 library(dplyr)
@@ -43,12 +42,16 @@ maxWeeks <- merge(aggregate(weeks.on.board ~ name, merged, max), merged)
 maxWeeks <- unique(maxWeeks)
 maxWeeks <- maxWeeks[!duplicated(maxWeeks[c("name", "artists")]),]
 
-post2000 = filter(maxWeeks, maxWeeks$date>="2000-12-31")
+post2000 = filter(maxWeeks, maxWeeks$date>="1999-12-31")
+
+ordered = post2000[order(post2000$date),]
+test <- ordered[1:786,]
+train <- ordered[787:2621,]
 
 #Need to remove multiple entries, it seems Spotify has songs multiple times (maybe live performances, different versions), 
 #Average columns and merge based on song/name
 set.seed(896)
-idx <- createDataPartition(maxWeeks$weeks.on.board, p = 0.70, list = FALSE)
+idx <- createDataPartition(post2000$weeks.on.board, p = 0.70, list = FALSE)
 train <- maxWeeks[idx,]
 test <- maxWeeks[-idx,]
 
