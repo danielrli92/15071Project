@@ -2,6 +2,9 @@
 library(tidyr)
 library(tidyverse)
 library(dplyr)
+library(caret)
+library(rpart)
+library(rpart.plot)
 
 setwd("E:/MBA/15.071 Analytics Edge/Project")
 Billboard <- read.csv("charts.csv")
@@ -40,8 +43,29 @@ maxWeeks <- merge(aggregate(weeks.on.board ~ name, merged, max), merged)
 maxWeeks <- unique(maxWeeks)
 maxWeeks <- maxWeeks[!duplicated(maxWeeks[c("name", "artists")]),]
 
+post2000 = filter(maxWeeks, maxWeeks$date>="2000-12-31")
+
 #Need to remove multiple entries, it seems Spotify has songs multiple times (maybe live performances, different versions), 
 #Average columns and merge based on song/name
+set.seed(896)
+idx <- createDataPartition(maxWeeks$weeks.on.board, p = 0.70, list = FALSE)
+train <- maxWeeks[idx,]
+test <- maxWeeks[-idx,]
 
-linearModel = lm(data = maxWeeks, weeks.on.board ~ .)
+linearModel = lm(data = train, weeks.on.board ~ 
+                   danceability+
+                   duration_ms+
+                   explicit+
+                   energy+
+                   key+
+                   loudness+
+                   mode+
+                   speechiness+
+                   acousticness+
+                   instrumentalness+
+                   liveness+
+                   valence+
+                   tempo+
+                   time_signature)
+
 summary(linearModel)
