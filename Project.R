@@ -16,7 +16,7 @@ separated[c ("a", "b","c","d")] <- lapply(seperated[c ("a", "b","c","d")], trimw
 
 #combine artist columns with commas between like Spotify data
 combined <- Billboard
-combined$artist <- paste0("'", seperated$a, "', '", seperated$b, "', '", seperated$c, "', '", seperated$d, "'")
+combined$artist <- paste0("'", separated$a, "', '", separated$b, "', '", separated$c, "', '", separated$d, "'")
 
 #remove everything after NAs
 combined$artist <-gsub("NA.*","",combined$artist)
