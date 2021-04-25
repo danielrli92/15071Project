@@ -42,19 +42,21 @@ maxWeeks <- merge(aggregate(weeks.on.board ~ name, merged, max), merged)
 maxWeeks <- unique(maxWeeks)
 maxWeeks <- maxWeeks[!duplicated(maxWeeks[c("name", "artists")]),]
 
+#Only look at past year 2000 songs
 post2000 = filter(maxWeeks, maxWeeks$date>="1999-12-31")
 
+#Split based on year
 ordered = post2000[order(post2000$date),]
 test <- ordered[1:786,]
 train <- ordered[787:2621,]
 
-#Need to remove multiple entries, it seems Spotify has songs multiple times (maybe live performances, different versions), 
-#Average columns and merge based on song/name
+#Split 70-30
 set.seed(896)
 idx <- createDataPartition(post2000$weeks.on.board, p = 0.70, list = FALSE)
 train <- maxWeeks[idx,]
 test <- maxWeeks[-idx,]
 
+#Linear Model
 linearModel = lm(data = train, weeks.on.board ~ 
                    danceability+
                    duration_ms+
