@@ -85,19 +85,19 @@ test <- maxWeeks[-idx,]
 linearModel = lm(data = train, weeks.on.board ~ 
                    danceability+
                    duration_ms+
-                   explicit+
+                   #explicit+
                    energy+
-                   key+
+                   #key+
                    loudness+
-                   mode+
-                   speechiness+
+                   #mode+
+                   #speechiness+
                    acousticness+
                    instrumentalness+
-                   liveness+
-                   valence+
-                   tempo+
-                   time_signature)
-
+                   #liveness+
+                   valence
+                   #tempo+
+                   #time_signature
+)
 summary(linearModel)
 
 
@@ -108,6 +108,8 @@ baseline <- mean(test$weeks.on.board)
 SST <- sum((test$weeks.on.board - baseline)^2)
 OSR <- 1 - SSR / SST
 OSR
+
+test$predicted.weeks.on.board = predictmodel
 
 #Linear Model for peak rank
 
